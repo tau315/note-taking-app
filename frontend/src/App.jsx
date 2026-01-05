@@ -22,7 +22,7 @@ function App() {
   // create new note and open a new editor page 
   // blank note with unique ID and URL
   const createNewNote = () => {
-    const newNote = { id: Date.now(), text: '' };
+    const newNote = { id: Date.now(), title: '', text: '' };
     setNotes([newNote, ...notes]);
     navigate(`/note/${newNote.id}`);
   };
@@ -51,6 +51,7 @@ function App() {
               <button className="new-note-btn" onClick={createNewNote}>
                 New Note
               </button>
+              <h2>Note List</h2>
               <NoteList notes={notes} deleteNote={deleteNote} />
             </>
           }

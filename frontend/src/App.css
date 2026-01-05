@@ -5,19 +5,6 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -38,14 +25,20 @@
 }
 
 .read-the-docs {
-  color: #888;
+  color: #e0e0e0;
 }
+
+body {
+  font-family: Verdana, sans-serif;
+}
+
+
 
 .new-note-btn {
   padding: 10px 20px;
   font-size: 16px;
   margin-bottom: 20px;
-  background-color: #28a745;
+  background-color: #2585d9;
   color: white;
   border: none;
   border-radius: 5px;
@@ -53,7 +46,7 @@
 }
 
 .new-note-btn:hover {
-  background-color: #218838;
+  background-color: #1b75c4;
 }
 
 .editor-container {
@@ -102,4 +95,13 @@
 
 .editor-buttons button:not(.cancel-btn):hover {
   background-color: #0056b3;
+}
+
+.title-input {
+  font-size: 20px;
+  padding: 10px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  outline: none;
+  margin-bottom: 10px;
 }

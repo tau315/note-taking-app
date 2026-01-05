@@ -12,12 +12,11 @@ function NoteList({ notes, deleteNote }) {
       {notes.map(note => (
         <div key={note.id} className="note">
           {/*navigate to the note subpage*/}
-          <p onClick={() => navigate(`/note/${note.id}`)}> 
-            {/*can change this part later to display a note title?*/}
-            {note.text ? note.text.substring(0, 30) + "..." : "Untitled Note"}
-          </p>
+          <br></br>
+          <button onClick={() => navigate(`/note/${note.id}`)}>{note.title||"Untitled Note"}</button>
           {/*individual delete button -- change this design later */}
           <button onClick={() => deleteNote(note.id)}>Delete</button>
+          <br></br>
         </div>
       ))}
     </div>
