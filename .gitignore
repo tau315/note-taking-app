@@ -7,8 +7,10 @@ frontend/.env
 backend/.venv/
 backend/__pycache__/
 backend/.env
+*.pyc
 
 # ===== General =====
 .DS_Store
 Thumbs.db
 *.log
+.env
