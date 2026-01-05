@@ -1,35 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import NoteList from './components/NoteList.jsx';
+import EditorWrapper from './components/EditorWrapper.jsx';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const navigate = useNavigate();
+
+  // load notes from localStorage or start empty
+  // keep track of all notes
+  const [notes, setNotes] = useState(() => {
+    const saved = localStorage.getItem('notes');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // save notes to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes));
+  }, [notes]);
+
+  // create new note and open a new editor page 
+  // blank note with unique ID and URL
+  const createNewNote = () => {
+    const newNote = { id: Date.now(), text: '' };
+    setNotes([newNote, ...notes]);
+    navigate(`/note/${newNote.id}`);
+  };
+
+  // save note (new or edited)
+  const saveNote = (updatedNote) => {
+    setNotes([updatedNote, ...notes.filter(n => n.id !== updatedNote.id)]);
+    navigate('/'); // back to home
+  };
+
+  // delete a note
+  const deleteNote = (id) => {
+    setNotes(notes.filter(note => note.id !== id));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app-container">
+      <h1>Note Taking App</h1>
+
+      <Routes>
+        {/* Home page */}
+        <Route
+          path="/"
+          element={
+            <>
+              <button className="new-note-btn" onClick={createNewNote}>
+                New Note
+              </button>
+              <NoteList notes={notes} deleteNote={deleteNote} />
+            </>
+          }
+        />
+
+        {/* Editor page */}
+        <Route
+          path="/note/:id"
+          element={<EditorWrapper notes={notes} saveNote={saveNote} />}
+        />
+      </Routes>
+    </div>
+  );
 }
 
-export default App
+export default App;
