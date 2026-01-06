@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Editor({ note, saveNote, cancelEditing }) {
+function Editor({ note, saveNote,deleteNote}) {
   // Local state for typing, makes sure text is editable
   const [text, setText] = useState(note.text);
   const [title, setTitle] = useState(note.title);
@@ -15,24 +15,27 @@ function Editor({ note, saveNote, cancelEditing }) {
     saveNote({ ...note, title,text });
   };
 
+    const handleDelete = () => {
+    deleteNote(note.id);
+  };
+
   return (
-    <div className="editor-container">
-        <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Note title"
+    <div className="editor">
+      <input
         className="title-input"
-        />
-      <textarea
-        value={text}                  // controlled input
-        onChange={(e) => setText(e.target.value)} //updates text as user types
-        placeholder="Type your note here..."
+        placeholder="Untitled"
+        value={title}
+        onChange={e => setTitle(e.target.value)}
       />
-      <div className="editor-buttons">
-        <button onClick={handleSave}>Save</button>
-        <button onClick={cancelEditing} className="cancel-btn">Back</button>
-      </div>
+
+      <textarea
+        className="text-input"
+        placeholder="Start writing..."
+        value={text}
+        onChange={e => setText(e.target.value)}
+      />
+      <button onClick={handleSave}>Save</button>
+      <button onClick={handleDelete}>Delete</button>
     </div>
   );
 }

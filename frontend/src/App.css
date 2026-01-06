@@ -34,74 +34,90 @@ body {
 
 
 
-.new-note-btn {
-  padding: 10px 20px;
-  font-size: 16px;
-  margin-bottom: 20px;
-  background-color: #2585d9;
-  color: white;
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/*sidebar*/
+aside {
+  height: 100%;
+  width: 120px;
+  position: fixed;
+  z-index:1;
+  left:0;
+  top:0;
+  background: #848484;
+  border-right: 1px solid #848484;
+  padding: 10px;
+}
+
+/*new note button*/
+.new-btn {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+/*sidebar notes*/
+.note-list {
+  list-style: none;
+  padding: 0;
+  background-color: #848484;
+}
+
+/*sidebar buttons*/
+
+.nav {
+  display: block;
+  padding: 8px 12px;
+  text-align: left;
+  background: none;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
+  color: #000000;
 }
 
-.new-note-btn:hover {
-  background-color: #1b75c4;
+.nav:hover {
+  background: #f3f3f3;
 }
 
-.editor-container {
+.nav.active {
+  background: #e5e5e5;
+  font-weight: 600;
+}
+
+
+
+
+/*main content*/
+.content {
+  flex: 1;
+  padding: 30px;
+}
+
+.editor {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.editor-container textarea {
-  width: 100%;
-  height: 70vh;
-  padding: 15px;
-  font-size: 16px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  resize: none;
-  outline: none;
-}
-
-.editor-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.editor-buttons button {
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-}
-
-.editor-buttons .cancel-btn {
-  background-color: #dc3545;
-  color: white;
-}
-
-.editor-buttons .cancel-btn:hover {
-  background-color: #c82333;
-}
-
-.editor-buttons button:not(.cancel-btn) {
-  background-color: #007bff;
-  color: white;
-}
-
-.editor-buttons button:not(.cancel-btn):hover {
-  background-color: #0056b3;
+  height: 100%;
 }
 
 .title-input {
-  font-size: 20px;
-  padding: 10px;
+  font-size: 28px;
   border: none;
-  border-bottom: 2px solid #ccc;
   outline: none;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.text-input {
+  flex: 1;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+.empty {
+  color: #888;
+  font-size: 16px;
 }

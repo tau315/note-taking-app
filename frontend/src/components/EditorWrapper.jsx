@@ -1,13 +1,11 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams} from 'react-router-dom';
 import Editor from './Editor.jsx';
 
-function EditorWrapper({ notes, saveNote }) {
+function EditorWrapper({ notes, saveNote, deleteNote }) {
   const { id } = useParams(); //gets note ID from URL
-  const navigate = useNavigate(); //allows for nav back to home page
-
+  //const navigate = useNavigate(); //allows for nav back to home page
   // Find note by ID
-  const note = notes.find(n => n.id === parseInt(id));
+  const note = notes.find(n => n.id === Number(id));
 
   if (!note) {
     return (
@@ -18,10 +16,22 @@ function EditorWrapper({ notes, saveNote }) {
     );
   }
 
-  // Back button handler
-  const cancelEditing = () => navigate('/');
+    const handleDelete = (id) => {
+    deleteNote(id);
+    navigate('/');
+  };
 
-  return <Editor note={note} saveNote={saveNote} cancelEditing={cancelEditing} />;
+  // Back button handler
+  //const cancelEditing = () => navigate('/');
+
+  return (
+    <Editor
+      note={note}
+      saveNote={saveNote}
+      deleteNote={handleDelete}
+    />
+  );
+
 }
 
 export default EditorWrapper;
