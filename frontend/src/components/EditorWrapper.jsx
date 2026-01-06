@@ -3,7 +3,6 @@ import Editor from './Editor.jsx';
 
 function EditorWrapper({ notes, saveNote, deleteNote }) {
   const { id } = useParams(); //gets note ID from URL
-  //const navigate = useNavigate(); //allows for nav back to home page
   // Find note by ID
   const note = notes.find(n => n.id === Number(id));
 
@@ -16,9 +15,8 @@ function EditorWrapper({ notes, saveNote, deleteNote }) {
     );
   }
 
-    const handleDelete = (id) => {
+  const handleDelete = (id) => {
     deleteNote(id);
-    navigate('/');
   };
 
   // Back button handler

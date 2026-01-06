@@ -47,8 +47,8 @@ aside {
   z-index:1;
   left:0;
   top:0;
-  background: #848484;
-  border-right: 1px solid #848484;
+  background: #007EA7;
+  border-right: 1px solid #007EA7;
   padding: 10px;
 }
 
@@ -63,7 +63,7 @@ aside {
 .note-list {
   list-style: none;
   padding: 0;
-  background-color: #848484;
+  background-color: #007EA7;
 }
 
 /*sidebar buttons*/
@@ -96,10 +96,13 @@ aside {
   padding: 30px;
 }
 
+/*editor content*/
 .editor {
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 400px;
+  
 }
 
 .title-input {
@@ -107,6 +110,8 @@ aside {
   border: none;
   outline: none;
   margin-bottom: 15px;
+  background: #f3f3f3;
+  color: #00171F;
 }
 
 .text-input {
@@ -115,6 +120,18 @@ aside {
   border: none;
   outline: none;
   resize: none;
+  background: #f3f3f3;
+  color: #00171F;
+}
+
+.button-container {
+  display: flex;
+  /* Optional: Add space between the buttons */
+  gap: 10px;
+  /* Optional: Center the buttons within their parent container */
+  justify-content: center;
+  /* Optional: Align the buttons along the cross axis (vertically centered if container has a height) */
+  align-items: center;
 }
 
 .empty {

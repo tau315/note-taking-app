@@ -34,8 +34,12 @@ function Editor({ note, saveNote,deleteNote}) {
         value={text}
         onChange={e => setText(e.target.value)}
       />
+        <br></br>
+      <div className="button-container">
       <button onClick={handleSave}>Save</button>
       <button onClick={handleDelete}>Delete</button>
+      </div>
+
     </div>
   );
 }

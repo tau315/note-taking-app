@@ -2,7 +2,6 @@
 import { NavLink } from 'react-router-dom';
 
 function Sidebar({ notes, createNote }) {
-  //const navigate = useNavigate();
 
   return (
     <aside className="sidebar">
@@ -12,7 +11,8 @@ function Sidebar({ notes, createNote }) {
       </button>
 
     <h3>Notes List</h3>
-          <div className="note-list">
+        <div className="note-list">
+        {/*Notes List navigation using NavLink */}
         {notes.map(note => (
           <NavLink
             key={note.id}
