@@ -9,7 +9,7 @@ function App() {
   const navigate = useNavigate();
 
   // load notes from localStorage or start empty
-  // keep track of all notes
+  /*
   const [notes, setNotes] = useState(() => {
     const saved = localStorage.getItem('notes');
     return saved ? JSON.parse(saved) : [];
@@ -20,7 +20,7 @@ function App() {
     localStorage.setItem('notes', JSON.stringify(notes));
   }, [notes]);
 
-  // create new note and open a new editor page 
+    // create new note and open a new editor page 
   // blank note with unique ID and URL
   const createNote = () => {
     const newNote = { id: Date.now(), title: '', text: '' };
@@ -37,14 +37,76 @@ function App() {
   // delete a note
   const deleteNote = (id) => {
     setNotes(notes.filter(note => note.id !== id));
+    navigate('/'); //back to home
+  };
+
+  */ 
+
+  const API_URL = 'http://localhost:8000/api/notes';
+  const [notes, setNotes] = useState([]);
+
+   // Load notes from backend on mount
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        setNotes(data);
+      } catch (err) {
+        console.error('Error fetching notes:', err);
+      }
+    };
+    fetchNotes();
+  }, []);
+
+    // Create a new note
+  const createNote = async () => {
+    const newNote = { id: Date.now(), title: '', content: '' }; // id for now in frontend
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newNote),
+      });
+      const data = await res.json();
+      setNotes([data, ...notes]);
+      navigate(`/note/${data.id}`);
+    } catch (err) {
+      console.error('Error creating note:', err);
+    }
+  };
+  // Save/update a note
+const saveNote = async (updatedNote) => {
+  try {
+    const res = await fetch(`${API_URL}/${updatedNote.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updatedNote), // must have content field
+    });
+    const data = await res.json();
+    setNotes([data, ...notes.filter(n => n.id !== updatedNote.id)]);
     navigate('/');
+  } catch (err) {
+    console.error('Error saving note:', err);
+  }
+};
+
+
+    // Delete a note
+  const deleteNote = async (id) => {
+    try {
+      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      setNotes(notes.filter(note => note.id !== id));
+      navigate('/');
+    } catch (err) {
+      console.error('Error deleting note:', err);
+    }
   };
 
     return (
     <div className="layout">
       <Sidebar notes={notes}
-  createNote={createNote}></Sidebar>
-
+        createNote={createNote}></Sidebar>
       <main className="content">
         <Routes>
           <Route path="/" element={<EmptyState />} />
@@ -59,3 +121,4 @@ function App() {
 }
 
 export default App;
+//curl http://localhost:8000/api/notes

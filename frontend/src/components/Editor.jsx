@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 
 function Editor({ note, saveNote,deleteNote}) {
   // Local state for typing, makes sure text is editable
-  const [text, setText] = useState(note.text);
+  const [content, setText] = useState(note.content);
   const [title, setTitle] = useState(note.title);
 
   // Update local state if note changes (different note)
   useEffect(() => {
-    setText(note.text);
+    setText(note.content);
     setTitle(note.title);
   }, [note]);
 
   const handleSave = () => {
-    saveNote({ ...note, title,text });
+    saveNote({ ...note, title,content });
   };
 
     const handleDelete = () => {
@@ -31,7 +31,7 @@ function Editor({ note, saveNote,deleteNote}) {
       <textarea
         className="text-input"
         placeholder="Start writing..."
-        value={text}
+        value={content}
         onChange={e => setText(e.target.value)}
       />
         <br></br>
