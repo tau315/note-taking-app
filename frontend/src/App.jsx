@@ -8,40 +8,6 @@ import './App.css';
 function App() {
   const navigate = useNavigate();
 
-  // load notes from localStorage or start empty
-  /*
-  const [notes, setNotes] = useState(() => {
-    const saved = localStorage.getItem('notes');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  // save notes to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('notes', JSON.stringify(notes));
-  }, [notes]);
-
-    // create new note and open a new editor page 
-  // blank note with unique ID and URL
-  const createNote = () => {
-    const newNote = { id: Date.now(), title: '', text: '' };
-    setNotes([newNote, ...notes]);
-    navigate(`/note/${newNote.id}`);
-  };
-
-  // save note (new or edited)
-  const saveNote = (updatedNote) => {
-    setNotes([updatedNote, ...notes.filter(n => n.id !== updatedNote.id)]);
-    navigate('/'); // back to home
-  };
-
-  // delete a note
-  const deleteNote = (id) => {
-    setNotes(notes.filter(note => note.id !== id));
-    navigate('/'); //back to home
-  };
-
-  */ 
-
   const API_URL = 'http://localhost:8000/api/notes';
   const [notes, setNotes] = useState([]);
 
@@ -121,4 +87,3 @@ const saveNote = async (updatedNote) => {
 }
 
 export default App;
-//curl http://localhost:8000/api/notes
