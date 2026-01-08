@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import EditorWrapper from './components/EditorWrapper';
 import EmptyState from './components/EmptyState';
+import HomePage from './components/HomePage';
 import './App.css';
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
     fetchNotes();
   }, []);
 
-    // Create a new note
+  // Create a new note
   const createNote = async () => {
     const newNote = { id: Date.now(), title: '', content: '' }; // id for now in frontend
     try {
@@ -41,29 +42,29 @@ function App() {
       console.error('Error creating note:', err);
     }
   };
+
   // Save/update a note
-const saveNote = async (updatedNote) => {
-  try {
-    const res = await fetch(`${API_URL}/${updatedNote.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updatedNote), // must have content field
-    });
-    const data = await res.json();
-    setNotes([data, ...notes.filter(n => n.id !== updatedNote.id)]);
-    navigate('/');
-  } catch (err) {
-    console.error('Error saving note:', err);
-  }
-};
+  const saveNote = async (updatedNote) => {
+    try {
+      const res = await fetch(`${API_URL}/${updatedNote.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedNote), // must have content field
+      });
+      const data = await res.json();
+      setNotes([data, ...notes.filter(n => n.id !== updatedNote.id)]);
+      navigate('/home');
+    } catch (err) {
+      console.error('Error saving note:', err);
+    }
+  };
 
-
-    // Delete a note
+  // Delete a note
   const deleteNote = async (id) => {
     try {
       await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
       setNotes(notes.filter(note => note.id !== id));
-      navigate('/');
+      navigate('/home');
     } catch (err) {
       console.error('Error deleting note:', err);
     }
@@ -71,15 +72,19 @@ const saveNote = async (updatedNote) => {
 
     return (
     <div className="layout">
-      <Sidebar notes={notes}
-        createNote={createNote}></Sidebar>
+      <Sidebar notes={notes} createNote={createNote}> </Sidebar>
       <main className="content">
         <Routes>
+          
           <Route path="/" element={<EmptyState />} />
-          <Route
+          <Route path="/home" element={<HomePage notes={notes}/>} />
+        
+        <Route
             path="/note/:id"
             element={<EditorWrapper notes={notes} saveNote={saveNote} deleteNote={deleteNote}/>}
           />
+
+
         </Routes>
       </main>
     </div>

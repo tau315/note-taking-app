@@ -19,9 +19,6 @@ function EditorWrapper({ notes, saveNote, deleteNote }) {
     deleteNote(id);
   };
 
-  // Back button handler
-  //const cancelEditing = () => navigate('/');
-
   return (
     <Editor
       note={note}
