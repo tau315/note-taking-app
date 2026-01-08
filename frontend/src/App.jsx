@@ -1,90 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
-import EditorWrapper from './components/EditorWrapper';
-import EmptyState from './components/EmptyState';
-import HomePage from './components/HomePage';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import EditorWrapper from "./components/EditorWrapper";
+import HomePage from "./components/HomePage";
+import LandingPage from "./components/LandingPage";
+import LoginPage from "./components/LoginPage";
+import RegisterPage from "./components/RegisterPage";
+import RequireAuth from "./auth/RequireAuth";
+import "./App.css";
+import { useRef } from "react";
+
+import { useAuth } from "./auth/AuthProvider";
+import { listNotes, createNote as apiCreate, updateNote as apiUpdate, deleteNote as apiDelete } from "./api";
 
 function App() {
   const navigate = useNavigate();
+  const { user, idToken } = useAuth();
 
-  const API_URL = 'http://localhost:8000/api/notes';
   const [notes, setNotes] = useState([]);
 
-   // Load notes from backend on mount
   useEffect(() => {
-    const fetchNotes = async () => {
-      try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        setNotes(data);
-      } catch (err) {
-        console.error('Error fetching notes:', err);
-      }
-    };
-    fetchNotes();
-  }, []);
+    if (!user || !idToken) {
+      setNotes([]);
+      return;
+    }
 
-  // Create a new note
+    (async () => {
+      try {
+        const data = await listNotes(idToken);
+        setNotes(data);
+      } catch (e) {
+        console.error("Error fetching notes:", e);
+      }
+    })();
+  }, [user, idToken]);
+
+
   const createNote = async () => {
-    const newNote = { id: Date.now(), title: '', content: '' }; // id for now in frontend
     try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newNote),
-      });
-      const data = await res.json();
+      const data = await apiCreate(idToken);
       setNotes([data, ...notes]);
-      navigate(`/note/${data.id}`);
-    } catch (err) {
-      console.error('Error creating note:', err);
+      navigate(`/app/note/${data.id}`);
+    } catch (e) {
+      console.error("Error creating note:", e);
     }
   };
 
-  // Save/update a note
+
   const saveNote = async (updatedNote) => {
     try {
-      const res = await fetch(`${API_URL}/${updatedNote.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedNote), // must have content field
+      const data = await apiUpdate(idToken, updatedNote.id, {
+        title: updatedNote.title,
+        content: updatedNote.content,
       });
-      const data = await res.json();
-      setNotes([data, ...notes.filter(n => n.id !== updatedNote.id)]);
-      navigate('/home');
-    } catch (err) {
-      console.error('Error saving note:', err);
+      setNotes([data, ...notes.filter((n) => n.id !== updatedNote.id)]);
+      navigate("/app/home");
+    } catch (e) {
+      console.error("Error saving note:", e);
     }
   };
 
-  // Delete a note
+
   const deleteNote = async (id) => {
     try {
-      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-      setNotes(notes.filter(note => note.id !== id));
-      navigate('/home');
-    } catch (err) {
-      console.error('Error deleting note:', err);
+      await apiDelete(idToken, id);
+      setNotes(notes.filter((n) => n.id !== id));
+      navigate("/app/home");
+    } catch (e) {
+      console.error("Error deleting note:", e);
     }
   };
 
-    return (
+
+  return (
     <div className="layout">
-      <Sidebar notes={notes} createNote={createNote}> </Sidebar>
-      <main className="content">
+      {user && <Sidebar notes={notes} createNote={createNote} />}
+
+      <main className="content" style={{ marginLeft: user ? 120 : 0 }}>
         <Routes>
-          
-          <Route path="/" element={<EmptyState />} />
-          <Route path="/home" element={<HomePage notes={notes}/>} />
-        
-        <Route
-            path="/note/:id"
-            element={<EditorWrapper notes={notes} saveNote={saveNote} deleteNote={deleteNote}/>}
-          />
+          {/* Public */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-
+          {/* Protected */}
+          <Route element={<RequireAuth />}>
+            <Route path="/app/home" element={<HomePage notes={notes} />} />
+            <Route
+              path="/app/note/:id"
+              element={<EditorWrapper notes={notes} saveNote={saveNote} deleteNote={deleteNote} />}
+            />
+          </Route>
         </Routes>
       </main>
     </div>

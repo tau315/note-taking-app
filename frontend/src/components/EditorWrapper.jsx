@@ -1,32 +1,22 @@
-import { useParams} from 'react-router-dom';
-import Editor from './Editor.jsx';
+import { useParams, useNavigate } from "react-router-dom";
+import Editor from "./Editor.jsx";
 
 function EditorWrapper({ notes, saveNote, deleteNote }) {
-  const { id } = useParams(); //gets note ID from URL
-  // Find note by ID
-  const note = notes.find(n => n.id === Number(id));
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const note = notes.find((n) => n.id === Number(id));
 
   if (!note) {
     return (
       <div>
         <p>Note not found!</p>
-        <button onClick={() => navigate('/')}>Back to Home</button>
+        <button onClick={() => navigate("/app/home")}>Back to Home</button>
       </div>
     );
   }
 
-  const handleDelete = (id) => {
-    deleteNote(id);
-  };
-
-  return (
-    <Editor
-      note={note}
-      saveNote={saveNote}
-      deleteNote={handleDelete}
-    />
-  );
-
+  return <Editor note={note} saveNote={saveNote} deleteNote={deleteNote} />;
 }
 
 export default EditorWrapper;

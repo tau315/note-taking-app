@@ -1,38 +1,32 @@
-
-import { NavLink } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, Link } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 function Sidebar({ notes, createNote }) {
-  
-  const navigate = useNavigate()
-  const navHome = () => {
-    navigate('/home'); // Navigate to home page
-  }
+  const navigate = useNavigate();
+
+  const navHome = () => navigate("/app/home");
+
+  const logout = async () => {
+    await signOut(auth);
+    navigate("/");
+  };
 
   return (
     <aside className="sidebar">
-    {/*make a new note button works*/}
-      <button className="new-btn" onClick={createNote}>
-        + New Note
-      </button>
+      <button className="new-btn" onClick={createNote}>+ New Note</button>
+      <button className="home-btn" onClick={navHome}>Home</button>
+      <button onClick={logout} style={{ width: "100%", marginTop: 10 }}>Logout</button>
 
-    {/*home button*/}
-      <button className="home-btn" onClick={navHome}>
-        Home
-      </button>
-
-    <h3>Notes List</h3>
-        <div className="note-list">
-        {/*Notes List navigation using NavLink */}
-        {notes.map(note => (
+      <h3>Notes List</h3>
+      <div className="note-list">
+        {notes.map((note) => (
           <NavLink
             key={note.id}
-            to={`/note/${note.id}`}
-            className={({ isActive }) =>
-              `nav ${isActive ? 'active' : ''}`
-            }
+            to={`/app/note/${note.id}`}
+            className={({ isActive }) => `nav ${isActive ? "active" : ""}`}
           >
-            {note.title || 'Untitled Note'}
+            {note.title || "Untitled Note"}
           </NavLink>
         ))}
       </div>

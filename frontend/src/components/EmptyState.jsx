@@ -1,3 +1,4 @@
+// EmptyState.jsx
 function EmptyState() {
 //default page, maybe make this a home page later
   return (
